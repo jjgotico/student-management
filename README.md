@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Student Management System
 
 ## Abstract
@@ -197,3 +198,7 @@ print(results.describe())  # Get statistical summary
 ## Requirements
 - Python 3.6+
 - No additional packages required 
+=======
+# student-management
+Student Management System - Data Structures and Algorithms
+>>>>>>> c0d57d9ff33707d41858cc5fa32c78ee9faa34ab
