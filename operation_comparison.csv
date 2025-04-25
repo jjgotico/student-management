@@ -1,0 +1,6 @@
+Operation,Linked List,Hash Table,Combined Structure
+Search,O(n),O(1),O(1)
+Insert,O(1)*,O(1),O(n)
+Delete,O(n),O(1),O(n)
+Traverse,O(n),O(n),O(n)
+Update,O(n),O(1),O(1)
