@@ -150,4 +150,4 @@ if __name__ == "__main__":
 
     # Try to search for deleted student
     print("\nTrying to find deleted student (1002):")
-    sms.print_student_details(1002) 
+    sms.print_student_details(1002)
