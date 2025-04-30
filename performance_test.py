@@ -3,6 +3,104 @@ import csv
 import random
 from student_management_system import StudentManagementSystem
 
+def measure_time(func):
+    """Decorator to measure function execution time."""
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        print(f"{func.__name__}: {(end - start)*1000:.2f} ms")
+        return result
+    return wrapper
+
+class PerformanceTest:
+    def __init__(self):
+        self.sms = StudentManagementSystem()
+        self.test_sizes = [100, 1000, 10000]
+        self.sample_courses = ["Math", "Physics", "Chemistry", "Biology", "English"]
+
+    def generate_student_data(self, n):
+        """Generate n random student records."""
+        students = []
+        for i in range(n):
+            student_id = f"{i:05d}"  # 5-digit ID
+            name = f"Student_{i}"
+            grades = {
+                course: random.randint(60, 100)
+                for course in self.sample_courses
+            }
+            students.append((student_id, name, grades))
+        return students
+
+    @measure_time
+    def test_add_students(self, n):
+        """Test adding n students."""
+        students = self.generate_student_data(n)
+        for student_id, name, grades in students:
+            self.sms.add_student(student_id, name, grades)
+
+    @measure_time
+    def test_search_students(self, n):
+        """Test searching for n random students."""
+        for _ in range(n):
+            student_id = f"{random.randint(0, n-1):05d}"
+            self.sms.search_student(student_id)
+
+    @measure_time
+    def test_update_grades(self, n):
+        """Test updating grades for n random students."""
+        for _ in range(n):
+            student_id = f"{random.randint(0, n-1):05d}"
+            course = random.choice(self.sample_courses)
+            new_grade = random.randint(60, 100)
+            self.sms.update_grade(student_id, course, new_grade)
+
+    @measure_time
+    def test_calculate_gpas(self, n):
+        """Test calculating GPAs for n random students."""
+        for _ in range(n):
+            student_id = f"{random.randint(0, n-1):05d}"
+            self.sms.calculate_gpa(student_id)
+
+    @measure_time
+    def test_process_withdrawals(self, n):
+        """Test processing withdrawals for n/10 random students."""
+        for _ in range(n//10):  # Testing with 10% of total students
+            student_id = f"{random.randint(0, n-1):05d}"
+            self.sms.process_withdrawal(student_id)
+
+    @measure_time
+    def test_traverse_all(self):
+        """Test traversing all students."""
+        _ = self.sms.get_all_students()
+
+    def run_all_tests(self):
+        """Run all performance tests for different sizes."""
+        print("\n🚀 Starting Performance Tests")
+        print("=" * 50)
+
+        for size in self.test_sizes:
+            print(f"\n📊 Testing with {size} students:")
+            print("-" * 50)
+            
+            # Reset SMS for each test size
+            self.sms = StudentManagementSystem()
+            
+            # Run tests
+            self.test_add_students(size)
+            self.test_search_students(size)
+            self.test_update_grades(size)
+            self.test_calculate_gpas(size)
+            self.test_process_withdrawals(size)
+            self.test_traverse_all()
+
+            # Memory usage (approximate)
+            import sys
+            memory_used = sys.getsizeof(self.sms.hash_table) + \
+                         sum(sys.getsizeof(student) for student in self.sms.get_all_students())
+            print(f"\nMemory Usage: {memory_used/1024:.2f} KB")
+            print("=" * 50)
+
 def generate_test_data(size):
     """Generate test data for students."""
     students = []
@@ -111,4 +209,8 @@ if __name__ == "__main__":
     save_results_to_csv(results)
     
     # Generate operation comparison
-    generate_operation_comparison_csv() 
+    generate_operation_comparison_csv()
+
+    # Run all performance tests for different sizes
+    perf_test = PerformanceTest()
+    perf_test.run_all_tests() 
